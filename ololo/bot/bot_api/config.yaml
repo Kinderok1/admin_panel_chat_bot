@@ -1,0 +1,15 @@
+# Telegram Bot API Token
+bot:
+    token: 1043923109:AAG26SjtlMZLd5mmPt78D8Fch7vYnlTCPoM
+    parse_mode: markdown
+
+# Whether to skip previous updates or not
+executor:
+    skip_updates: true
+
+# Visible commands
+commands:
+    start: Start conversation with me
+
+test_payment_token:
+    - 381764678:TEST:24071
