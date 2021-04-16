@@ -4,8 +4,9 @@ from aiogram import Dispatcher, executor
 from loguru import logger
 
 from ...bot_api import handlers
-from ...bot_api.bot import config, dp, bot_manager
-from ...bot_api.misc import set_commands
+from ...bot_api.bot import config, dp
+from ...bot_api.bot_manager import bot_manager
+from ...bot_api.misc.helper import set_commands
 
 class Command(BaseCommand):
     help = 'Запуск телеграм-бота'

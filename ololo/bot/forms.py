@@ -1,5 +1,5 @@
 from django import forms
-from .models import Items, Members
+from .models import Items, Members,MembersList,Sendler
 
 
 class ItemForm(forms.ModelForm):
@@ -10,3 +10,13 @@ class ItemForm(forms.ModelForm):
                    'image': forms.TextInput,
                    'description': forms.Textarea,
                    }
+class MembersListForm(forms.ModelForm):
+    class Meta:
+        model = MembersList
+        fields = ('name',)
+
+class SendlerForm(forms.ModelForm):
+    class Meta:
+        model = Sendler
+        fields = ('header', 'text', 'members_list','send_date', 'image')
+        widgets = {'text': forms.Textarea, }

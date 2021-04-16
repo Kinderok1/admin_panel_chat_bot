@@ -1,7 +1,9 @@
 from django.db import models
-
-# Create your models here.
 from django.utils.safestring import mark_safe
+from .bot_api.misc.storage_set import flag
+
+STATUS_SENDLER = [ 'Ждет отправки к ', 'Было отправлено ']
+
 
 
 class Members(models.Model):
@@ -39,3 +41,53 @@ class Items(models.Model):
     class Meta:
         verbose_name = "Товар"
         verbose_name_plural = "Товары"
+
+class MembersList(models.Model):
+    name = models.CharField(max_length=70, verbose_name='Название')
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    id_s_list = models.CharField(max_length=560, verbose_name='Содержание')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Список для рассылки"
+        verbose_name_plural = "Списки для рассылки"
+
+class Sendler(models.Model):
+    header = models.CharField(max_length=60, verbose_name='Тема')
+    text = models.CharField(max_length=360, verbose_name='Содержание')
+    members_list = models.ForeignKey(MembersList, on_delete=models.CASCADE, null=True, verbose_name="Список для рассылки")
+    send_date = models.DateTimeField(null=True, verbose_name='Время отправки')
+    status = models.CharField(max_length=35, null=True, verbose_name='Статус')
+    image = models.ImageField(upload_to='sendler_image/', null=True, blank=True, verbose_name='Изображение')
+
+    def save(self, *args, **kwargs):
+        """
+        Надстройка перед сохранением
+        """
+        send_date = str(self.send_date)[:19]
+        self.status = STATUS_SENDLER[0] + send_date
+        super().save(*args, **kwargs)
+        #тут хорошо бы сделать какой нибудь хук,наверное...
+
+        # StorageSet.FLAG = send_date
+        # print('****************************************************************************')
+        # print(StorageSet.FLAG)
+        # print('****************************************************************************')
+        # StorageSet.CAPTION = self.header
+        # StorageSet.PK = self.pk
+        # StorageSet.STATUS = STATUS_SENDLER[1]
+        flag[1] = send_date
+        flag[2] = self.header
+
+
+    def __str__(self):
+        return self.header
+
+    def image_tag(self):
+        return mark_safe('<img src="%s" width="105" height="105" />' % (
+            self.image.url))  # Get Image url
+    class Meta:
+        verbose_name = "Рассылка"
+        verbose_name_plural = "Рассылки"
