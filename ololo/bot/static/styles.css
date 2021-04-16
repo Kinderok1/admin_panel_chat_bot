@@ -1,0 +1,32 @@
+a img {
+border-radius: 50%;
+}
+table {
+    border-color: #e6f2ff;
+}
+toggle-nav-sidebar{
+    color: #e6f2ff;
+}
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: white;
+}
+
+element.style {
+}
+h1 {
+    margin: 0 0 30px;
+    font-weight: 190;
+    font-size: 19px;
+    color: var(--body-quiet-color);
+}
+
+
+td, th {
+    font-size: 15px;
+    line-height: 18px;
+    border-bottom: 2px solid var(--hairline-color);
+    vertical-align: top;
+    padding: 15px;
+}

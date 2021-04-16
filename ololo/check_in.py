@@ -1,9 +1,11 @@
 import os
 import django
-
+from PIL import Image
+from asgiref.sync import sync_to_async
+os.environ['DJANGO_ALLOW_ASYNC_UNSAFE'] = 'true'
 os.environ['DJANGO_SETTINGS_MODULE'] = 'ololo.settings'
 django.setup()
-from bot.models import Items
+from bot.models import Members
 
 import logging
 
@@ -36,10 +38,63 @@ async def finder(message: types.Message):
     """
     This handler will be called when user sends `/start` or `/help` command
     """
-    find = Items.objects.all()
+    # find = Items.objects.all()
+    #
+    # message_reply = "Привет!\nМеня зовут FindBot!\n%s" % find
+    # await message.reply(message_reply, parse_mode=types.ParseMode.MARKDOWN)
+    user_photo = await bot.get_user_profile_photos(message.from_user.id, offset=0)
+    #await bot.send_photo(message.from_user.id, photo=user_photo.photos[0][-1].file_id)
+    try:
+        file = await bot.download_file_by_id(user_photo.photos[0][-1].file_id)
+    except:
+        'no photo'
 
-    message_reply = "Привет!\nМеня зовут FindBot!\n%s" % find
-    await message.reply(message_reply, parse_mode=types.ParseMode.MARKDOWN)
+    from io import BytesIO
+    from django.core.files.uploadedfile import InMemoryUploadedFile
+    from django.core.files.base import ContentFile
+    from django.conf import settings
+
+    IMAGE_WIDTH = 100
+    IMAGE_HEIGHT = 100
+
+    def resize_image(image_field, width=IMAGE_WIDTH, height=IMAGE_HEIGHT, name=None):
+        """
+        Resizes an image from a Model.ImageField and returns a new image as a ContentFile
+        """
+        img = Image.open(file)
+
+
+        if img.size[0] > width or img.size[1] > height:
+            new_img = img.resize((width, height))
+
+        buffer = BytesIO()
+        new_img.save(fp=buffer, format='JPEG')
+        return ContentFile(buffer.getvalue())
+
+    # assuming your Model instance is called `instance`
+    image_field = Members()
+
+    img_name = 'my_image.jpg'
+    img_path = settings.MEDIA_ROOT + img_name
+
+    pillow_image = resize_image(
+        image_field,
+        width=IMAGE_WIDTH,
+        height=IMAGE_HEIGHT,
+        name=img_path)
+
+    image_field.image.save(img_name, InMemoryUploadedFile(
+        pillow_image,  # file
+        None,  # field_name
+        img_name,  # file name
+        'image/jpeg',  # content_type
+        pillow_image.tell,  # size
+        None)  # content_type_extra
+                     )
+    product = Members.objects.get(name='Pavel')
+    product.name = message.from_user.full_name
+    product.id_t = message.from_user.id
+    product.save()
 
 #set callback to this handler!
 async def process_buy_command(message: types.Message):
