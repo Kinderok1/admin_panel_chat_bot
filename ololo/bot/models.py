@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.safestring import mark_safe
-from .bot_api.misc.storage_set import flag
+from .bot_api.misc.storage_set import get_flag
 
 STATUS_SENDLER = [ 'Ждет отправки к ', 'Было отправлено ']
 
@@ -71,16 +71,13 @@ class Sendler(models.Model):
         super().save(*args, **kwargs)
         #тут хорошо бы сделать какой нибудь хук,наверное...
 
-        # StorageSet.FLAG = send_date
-        # print('****************************************************************************')
-        # print(StorageSet.FLAG)
-        # print('****************************************************************************')
-        # StorageSet.CAPTION = self.header
-        # StorageSet.PK = self.pk
-        # StorageSet.STATUS = STATUS_SENDLER[1]
-        flag[1] = send_date
-        flag[2] = self.header
 
+        flag=dict()
+        flag['date'] = send_date
+        flag['caption'] = self.header
+        flag['status'] = STATUS_SENDLER[1]
+        flag['pk'] = self.pk
+        get_flag(flag)
 
     def __str__(self):
         return self.header

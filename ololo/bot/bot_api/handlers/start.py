@@ -1,8 +1,7 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
-import os
+import os, sys
 import django
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'ololo.settings'
 django.setup()
 from ...models import Items
 

@@ -1,7 +1,7 @@
 # Telegram Bot API Token
 bot:
-    token: 1043923109:AAG26SjtlMZLd5mmPt78D8Fch7vYnlTCPoM
-    parse_mode: markdown
+    token: 1735844036:AAFT3bUgJqzPTTMIHNqjB1TaGfHo26S-EKg
+    parse_mode: markdownv2
 
 # Whether to skip previous updates or not
 executor:
