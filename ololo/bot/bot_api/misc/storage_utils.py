@@ -10,7 +10,8 @@ class StorageHandler():
     FLAG = None
     CAPTION = None
     STATUS = None
-    
+    DATE = None
+    FULL_DATE = None
 
     @classmethod
     async def cancel_task(cls):
@@ -30,7 +31,7 @@ class StorageHandler():
     @classmethod
     @sync_to_async()
     def change_status(cls):
-        Sendler.objects.filter(pk=cls.PK).update(status=cls.STATUS)
+        Sendler.objects.filter(pk=cls.PK).update(status=cls.STATUS+cls.FULL_DATE)
 
     @classmethod
     async def send(cls):
@@ -38,7 +39,7 @@ class StorageHandler():
         await bot.send_message(618669689,'caption')
         await cls.change_status()
 
-        await cls.cancel_task()
+        #await cls.cancel_task()
 
     @classmethod
     def time_difference(cls, start, end):
@@ -50,7 +51,7 @@ class StorageHandler():
 
     @classmethod
     async def wait(cls, data:dict,):
-
+        cls.FULL_DATE = data['date']
         cls.DATE = data['date'][11:]
         cls.STATUS = data['status']
         cls.CAPTION = data['caption']

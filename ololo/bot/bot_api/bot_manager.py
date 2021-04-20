@@ -49,11 +49,12 @@ async def bot_manager():
             await dp.storage.update_data(
                 user=data['pk'],
                 data={"task_id": id(task)}),
-
-
-            user = await dp.storage.get_data(user=data['pk'])
-            if user['active']:
-                await cancel_task(user["task_id"])
+            #kill task
+            for (chat_id, users_data) in dp.storage.data.items():
+                for user_id in users_data.keys():
+                    user = await dp.storage.get_data(user=user_id)
+                    if user['active']:
+                        await cancel_task(user["task_id"])
 
         except:
             await asyncio.sleep(3)
