@@ -88,3 +88,4 @@ class Sendler(models.Model):
     class Meta:
         verbose_name = "Рассылка"
         verbose_name_plural = "Рассылки"
+

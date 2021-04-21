@@ -69,10 +69,12 @@ class SendlerAdmin(admin.ModelAdmin):
     form = SendlerForm
     change_form_template = settings.BASE_DIR + "/bot/templates/admin/bot/Sendler/change_form.html"
 
-
+class TypeAdmin(admin.ModelAdmin):
+    pass
 
 admin.site.register(Items, ItemsAdmin)
 admin.site.register(MembersList, MembersListAdmin)
 admin.site.register(Members, MembersAdmin)
 admin.site.register(Sendler, SendlerAdmin)
+admin.site.register(Type, TypeAdmin)
 
