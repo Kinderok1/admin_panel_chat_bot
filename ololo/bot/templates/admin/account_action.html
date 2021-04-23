@@ -1,0 +1,40 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% block content %}
+<head>
+<link rel="stylesheet" href="{% static 'account_action.css' %}">
+</head>
+{% if not entries %}
+      <div class="container">
+        <h2>У вас нет диалога с этим пользователем</h2>
+        <span class="time-right">{{e.created_at}}</span>
+      </div>
+{% endif %}
+{% for e in entries %}
+    {% if e.from_user_msg %}
+      <div class="container">
+        <img src="https://www.vippng.com/png/detail/416-4161690_empty-profile-picture-blank-avatar-image-circle.png" alt="Avatar">
+        <p>{{e.from_user_msg}}</p>
+        <span class="time-right">{{e.created_at}}</span>
+      </div>
+    {% endif %}
+
+   {% if e.to_user_msg%}
+    <div class="container darker">
+        <img src="https://www.kindpng.com/picc/m/699-6997452_administrator-network-icons-system-avatar-computer-transparent-admin.png" alt="Avatar" class="right">
+      <p>{{e.to_user_msg}}</p>
+      <span class="time-left">{{e.created_at}}</span>
+    </div>
+   {% endif %}
+{% endfor %}
+<div class="chat-popup" id="myForm">
+  <form method="post" action=" " class="form-container">
+      {% csrf_token %}
+
+    <label for="msg"><b>Сообщение</b></label>
+    <textarea placeholder="Введите сообщение" name="msg" required></textarea>
+
+    <button type="submit" class="btn">Отправить</button>
+  </form>
+</div>
+{% endblock %}

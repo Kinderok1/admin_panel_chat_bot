@@ -5,6 +5,8 @@ from loguru import logger
 from .bot import bot,dp
 data = dict()
 FILENAME = r'C:\Users\павел\PycharmProjects\huita\ololo\bot\bot_api\misc\states2.db'
+FILENAME2 = r'C:\Users\павел\PycharmProjects\huita\ololo\bot\bot_api\misc\states3.db'
+
 
 async def cancel_task(task_id: int):
     task_reg = {
@@ -24,7 +26,8 @@ async def bla_bla():
 
     await StorageHandler.wait(data)
 
-
+async def msg_msg():
+    pass
 
 
 async def bot_manager():
@@ -49,6 +52,7 @@ async def bot_manager():
             await dp.storage.update_data(
                 user=data['pk'],
                 data={"task_id": id(task)}),
+
             #kill task
             for (chat_id, users_data) in dp.storage.data.items():
                 for user_id in users_data.keys():
@@ -58,5 +62,16 @@ async def bot_manager():
 
         except:
             await asyncio.sleep(3)
-            logger.info('Cycling')
+            logger.info('No send_post Cycling')
 
+
+        finally:
+            try:
+                with shelve.open(FILENAME2) as states:
+                    data['msg'] = states['msg']
+                    data['owner'] = states['owner']
+                    states.clear()
+                await msg_msg()
+            except:
+                await asyncio.sleep(3)
+                logger.info('No send_post Cycling')

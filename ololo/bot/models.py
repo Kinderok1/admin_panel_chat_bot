@@ -33,7 +33,7 @@ class Items(models.Model):
     caption = models.CharField(max_length=60, verbose_name='Название товара')
     image = models.CharField(max_length=10, verbose_name='Изображение')
     description = models.CharField(max_length=150, verbose_name='Описание товара')
-    type = models.ForeignKey(Type, on_delete=models.CASCADE, null=True, verbose_name="Тип")
+    type = models.ForeignKey(Type, on_delete=models.CASCADE, null=True, verbose_name="Тип")#удалишь тип,удалишь и эти записи
 
     def baby_boomer_status(self):
         return "what is this"
@@ -88,4 +88,35 @@ class Sendler(models.Model):
     class Meta:
         verbose_name = "Рассылка"
         verbose_name_plural = "Рассылки"
+
+class Notifications(models.Model):
+    from_user_name = models.CharField(max_length=70,blank=True,null=True)
+    from_user_id = models.IntegerField(null=True, blank=True)
+    is_read = models.BooleanField(default=False)
+    url_to_dialog = models.CharField(max_length=50,blank=True,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        ordering = ['-created_at']
+
+class Messages(models.Model):
+    owner = models.ForeignKey(Members, on_delete=models.CASCADE)
+    from_user_msg = models.CharField(max_length=4095,null=True, blank=True)
+    to_user_msg = models.CharField(max_length=4095,null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
+
+    def save(self, *args, **kwargs):
+        """
+        Надстройка перед сохранением
+        """
+        if self.to_user_msg:
+            flag = dict()
+            flag['msg'] = self.to_user_msg
+            flag['owner'] = self.owner
+            get_flag(flag)
+
+        super().save(*args, **kwargs)
+
 

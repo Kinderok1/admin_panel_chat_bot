@@ -1,21 +1,23 @@
 from django.contrib import admin
 from django.utils.translation import ngettext
 from django.contrib import messages
-
+from django.urls import path, reverse
+from django.utils.html import format_html
 
 # Register your models here.
 from django.utils.safestring import mark_safe
 from imagekit.admin import AdminThumbnail
-from .models import Members, Items, Type, MembersList, Sendler
+from .models import Members, Items, Type, MembersList, Sendler, Notifications, Messages
 from .forms import ItemForm, MembersListForm,SendlerForm
 from django.conf import settings
+from django.template.response import TemplateResponse
 
 
 
 
 #@admin.register(Members)
 class MembersAdmin(admin.ModelAdmin):
-    list_display = ["image_tag", "name"]
+    list_display = ["image_tag", "name",'members_actions']
     actions = ['make_list']
     class Media:
         css = {
@@ -49,6 +51,64 @@ class MembersAdmin(admin.ModelAdmin):
         del actions['delete_selected']
         return actions
 
+    def get_urls(self):  # create path
+        urls = super().get_urls()
+
+        custom_urls = [
+            # path(
+            #     '<int:account_id>/messages',
+            #     self.admin_site.admin_view(self.members_messages),
+            #     name='account-deposit',
+            # ),
+            path('<int:account_id>/messages',
+                 self.admin_site.admin_view(self.members_messages, cacheable=True),
+                 name='account-deposit')
+        ]
+        return custom_urls + urls
+
+    def members_actions(self, obj):
+        return format_html(
+            '<a class="button" href="{}">Сообщения</a> ',
+            reverse('admin:account-deposit', args=[obj.pk]),  # по имени шаблона ищет юрл адрес
+        )
+
+    members_actions.short_description = 'Сообщения подписчика'
+    members_actions.allow_tags = True
+
+    def members_messages(self, request, account_id, *args, **kwargs):
+        return self.process_action(
+            request=request,
+            account_id=account_id,
+            action_title='Сообщения:',
+        )
+
+    def process_action(
+            self,
+            request,
+            account_id,
+            action_title
+    ):
+        '''Это своеобразное вью администратора'''
+        if request.method == 'POST':
+            member = Members.objects.get(pk=account_id)
+            entites = Messages(owner=member, to_user_msg=request.POST['msg'])
+            entites.save()
+
+        context = self.admin_site.each_context(request)
+
+        context['opts'] = self.model._meta
+        context['title'] = action_title
+
+        messages = Messages.objects.filter(owner=account_id)
+        context['entries'] = messages
+        print(context)
+
+        return TemplateResponse(
+            request,
+            'admin/account_action.html',
+            context,
+        )
+
 
 #@admin.register(Items)
 class ItemsAdmin(admin.ModelAdmin):
@@ -62,19 +122,35 @@ class MembersListAdmin(admin.ModelAdmin):
     form = MembersListForm
 
     def has_add_permission(self, request, obj=None):
+        '''hide add model button'''
         return False
 
 class SendlerAdmin(admin.ModelAdmin):
     list_display = ('header', 'text', 'members_list', 'status', 'image_tag')
     form = SendlerForm
-    change_form_template = settings.BASE_DIR + "/bot/templates/admin/bot/Sendler/change_form.html"
+    change_form_template = settings.BASE_DIR + "/bot/templates/admin/bot/Sendler/change_list.html"
 
 class TypeAdmin(admin.ModelAdmin):
     pass
 
+class NotificationsAdmin(admin.ModelAdmin):
+
+    def has_module_permission(self, request):
+        return False
+    # def has_add_permission(self, request, obj=None):
+    #     return False
+
+class MessagesAdmin(admin.ModelAdmin):
+    pass
+
+
+
+
+admin.site.register(Messages, MessagesAdmin)
 admin.site.register(Items, ItemsAdmin)
 admin.site.register(MembersList, MembersListAdmin)
 admin.site.register(Members, MembersAdmin)
 admin.site.register(Sendler, SendlerAdmin)
 admin.site.register(Type, TypeAdmin)
-
+admin.site.register(Notifications, NotificationsAdmin)
+admin.site.enable_nav_sidebar = False

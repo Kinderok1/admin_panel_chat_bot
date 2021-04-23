@@ -8,7 +8,7 @@ from ..keyboards.keyboards import DefaultConstructor
 django.setup()
 
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from ...models import Items
+from ...models import Items,Notifications,Members
 from ..bot import bot,dp
 
 # States
@@ -60,3 +60,7 @@ async def menu_items(m: types.Message):
     pass
     #меню должно быть колбэкное
     #но для видео я эту логику реализовывать не буду!
+async def notice(m: types.Message):
+    id_t = m.from_user.id
+    user_name = m.from_user.full_name
+    notification = Notifications.objects.create(from_user_id=id_t, from_user_name=user_name)

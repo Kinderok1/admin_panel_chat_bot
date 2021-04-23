@@ -1,0 +1,43 @@
+{% extends "admin/base.html" %}
+{% load i18n admin_urls static admin_list %}
+{% load static %}
+
+{% block title %}{{ title }} | {% trans 'Администрирование чат-бота' %}{% endblock %}
+
+{% block branding %}
+<style type="text/css">
+
+  #header
+  {
+    background-image:url("{% static 'Untitled-1.png' %}");
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: cover;
+  }
+    #branding h1
+  {
+    color:black;
+    font-size:27px;
+    margin: 0px 70px 0px 60px;
+  }
+  #user-tools
+  {
+    float: right;
+    padding: 0;
+    margin: 0 0 0 20px;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-align: right;
+    color: black;
+}
+#header a:link, #header a:visited {
+    color: black;
+}
+</style>
+<h1 id="site-name">{% trans 'Администрирование чат-бота' %}</h1>
+{% endblock %}
+{% block content_title %}{% endblock %}
+
+{% block nav-global %}{% endblock %}

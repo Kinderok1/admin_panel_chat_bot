@@ -20,3 +20,6 @@ class SendlerForm(forms.ModelForm):
         model = Sendler
         fields = ('header', 'text', 'members_list','send_date', 'image')
         widgets = {'text': forms.Textarea, }
+
+class MessageForm(forms.Form):
+    msg = forms.CharField()
