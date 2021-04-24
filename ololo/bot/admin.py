@@ -154,3 +154,4 @@ admin.site.register(Sendler, SendlerAdmin)
 admin.site.register(Type, TypeAdmin)
 admin.site.register(Notifications, NotificationsAdmin)
 admin.site.enable_nav_sidebar = False
+

@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.safestring import mark_safe
-from .bot_api.misc.storage_set import get_flag
+from .bot_api.misc.storage_set import get_flag,get_flag_msg
 
 STATUS_SENDLER = [ 'Ждет отправки к ', 'Было отправлено ']
 
@@ -111,12 +111,13 @@ class Messages(models.Model):
         """
         Надстройка перед сохранением
         """
+        super().save(*args, **kwargs)
+
         if self.to_user_msg:
             flag = dict()
             flag['msg'] = self.to_user_msg
             flag['owner'] = self.owner
-            get_flag(flag)
+            get_flag_msg(flag)
 
-        super().save(*args, **kwargs)
 
 

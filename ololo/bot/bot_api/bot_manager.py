@@ -1,6 +1,6 @@
 import asyncio
 import shelve
-from .misc.storage_utils import StorageHandler
+from .misc.storage_utils import StorageHandler,FromAdminMessageHandler
 from loguru import logger
 from .bot import bot,dp
 data = dict()
@@ -26,8 +26,8 @@ async def bla_bla():
 
     await StorageHandler.wait(data)
 
-async def msg_msg():
-    pass
+async def msg_msg(data):
+    await FromAdminMessageHandler.parse(data)
 
 
 async def bot_manager():
@@ -71,7 +71,7 @@ async def bot_manager():
                     data['msg'] = states['msg']
                     data['owner'] = states['owner']
                     states.clear()
-                await msg_msg()
+                await msg_msg(data)
             except:
                 await asyncio.sleep(3)
-                logger.info('No send_post Cycling')
+                logger.info('No msg_post Cycling')

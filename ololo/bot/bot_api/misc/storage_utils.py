@@ -64,6 +64,11 @@ class StorageHandler():
 
         await cls.send()
 
-
+class FromAdminMessageHandler():
+    @classmethod
+    async def parse(cls, data: dict, ):
+        msg = data['msg']
+        owner_tel_id = data['owner'].id_t
+        await bot.send_message(owner_tel_id,msg)
 
 

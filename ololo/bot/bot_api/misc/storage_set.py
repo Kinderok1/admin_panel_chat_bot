@@ -8,6 +8,7 @@ def get_flag(flag:dict):
         states['caption'] = flag['caption']
         states['status'] = flag['status']
         states['pk'] = flag['pk']
+
 def get_flag_msg(flag:dict):
     import shelve
     FILENAME = r"C:\Users\павел\PycharmProjects\huita\ololo\bot\bot_api\misc\states3.db"
