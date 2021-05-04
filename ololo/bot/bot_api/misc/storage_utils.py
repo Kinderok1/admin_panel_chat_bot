@@ -5,6 +5,8 @@ from ...models import Sendler
 from loguru import logger
 os.environ['DJANGO_ALLOW_ASYNC_UNSAFE'] = 'true'
 from asgiref.sync import sync_to_async
+from ..aiograph import telegraph_msg_parser
+
 class StorageHandler():
     PK = None
     FLAG = None
@@ -12,6 +14,8 @@ class StorageHandler():
     STATUS = None
     DATE = None
     FULL_DATE = None
+    DESCRIPTION = None
+    IMAGE = None
 
     @classmethod
     async def cancel_task(cls):
@@ -35,8 +39,10 @@ class StorageHandler():
 
     @classmethod
     async def send(cls):
-        caption = cls.CAPTION
-        await bot.send_message(618669689,'caption')
+
+        url = await telegraph_msg_parser.main(cls.CAPTION, cls.DESCRIPTION, cls.IMAGE)
+        link = '<a href="%s">Новости</a>' % url
+        await bot.send_message(618669689, link)
         await cls.change_status()
 
         #await cls.cancel_task()
@@ -56,6 +62,8 @@ class StorageHandler():
         cls.STATUS = data['status']
         cls.CAPTION = data['caption']
         cls.PK = data['pk']
+        cls.DESCRIPTION = data['descrip']
+        cls.IMAGE = data['image']
         logger.info('TRIGGERED')
         time_now = datetime.now()
         time_now = time_now.strftime("%H:%M:%S")
@@ -69,6 +77,6 @@ class FromAdminMessageHandler():
     async def parse(cls, data: dict, ):
         msg = data['msg']
         owner_tel_id = data['owner'].id_t
-        await bot.send_message(owner_tel_id,msg)
+        await bot.send_message(owner_tel_id, msg)
 
 

@@ -15,9 +15,8 @@ from django.template.response import TemplateResponse
 
 
 
-#@admin.register(Members)
 class MembersAdmin(admin.ModelAdmin):
-    list_display = ["image_tag", "name",'members_actions']
+    list_display = ["image_tag", "name", 'user_state', 'members_actions']
     actions = ['make_list']
     class Media:
         css = {
@@ -45,11 +44,11 @@ class MembersAdmin(admin.ModelAdmin):
         ) % updated, messages.SUCCESS)
 
 
-    def get_actions(self, request):
-        '''эта функция отключает возможность удалить пользователей'''
-        actions = super().get_actions(request)
-        del actions['delete_selected']
-        return actions
+    # def get_actions(self, request):
+    #     '''эта функция отключает возможность удалить пользователей'''
+    #     actions = super().get_actions(request)
+    #     del actions['delete_selected']
+    #     return actions
 
     def get_urls(self):  # create path
         urls = super().get_urls()
@@ -110,13 +109,11 @@ class MembersAdmin(admin.ModelAdmin):
         )
 
 
-#@admin.register(Items)
 class ItemsAdmin(admin.ModelAdmin):
     list_filter = ('type',)
     list_display = ('caption', 'image', 'description', 'type')
     form = ItemForm
 
-#@admin.register(MembersList)
 class MembersListAdmin(admin.ModelAdmin):
     list_display = ('name', 'created_at',)
     form = MembersListForm
@@ -128,7 +125,7 @@ class MembersListAdmin(admin.ModelAdmin):
 class SendlerAdmin(admin.ModelAdmin):
     list_display = ('header', 'text', 'members_list', 'status', 'image_tag')
     form = SendlerForm
-    change_form_template = settings.BASE_DIR + "/bot/templates/admin/bot/Sendler/change_list.html"
+    change_form_template = settings.BASE_DIR + "/bot/templates/admin/bot/Sendler/change_form.html"
 
 class TypeAdmin(admin.ModelAdmin):
     pass

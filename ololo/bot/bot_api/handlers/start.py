@@ -8,8 +8,8 @@ from ..keyboards.keyboards import DefaultConstructor
 django.setup()
 
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from ...models import Items,Notifications,Members
-from ..bot import bot,dp
+from ...models import Items, Notifications, Members
+from ..bot import bot, dp
 
 # States
 class Form(StatesGroup):
@@ -23,6 +23,7 @@ class Form(StatesGroup):
     goodBye = State()
 
 async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
+    user_state = Members.objects.filter(id_t=m.from_user.id).update(user_state='В разделе Десерты')
     try:
         search = Items.objects.filter(type='Десерты')
         q = 1
@@ -32,7 +33,9 @@ async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
 async def start_command(m: Message):
     """
     Responds to /start.
+    тут будет первичная запись в базу!
     """
+
     #Отлично подойдет для кнопки в чате!!!
     # # Create an inline keyboard
     # welcome_markup = InlineKeyboardMarkup()
@@ -48,9 +51,12 @@ async def start_command(m: Message):
     #     f"Hello there, <b>{m.from_user.first_name}</b>!", reply_markup=welcome_markup
     # )
     keyboard = DefaultConstructor.create_main_kb()
+    link='<a href="https://telegra.ph/Eshe-04-24">link text</a>'
+    await bot.send_message(m.from_user.id, link)
     await m.reply("Welcome", reply_markup=keyboard)
 
 async def menu(m: types.Message):
+    user_state = Members.objects.filter(id_t=m.from_user.id).update(user_state='В разделе меню')
     keyboard = DefaultConstructor.create_kb()
     await m.reply('Меню', reply_markup=keyboard)
     #найти в базе по айдишнику
@@ -64,3 +70,10 @@ async def notice(m: types.Message):
     id_t = m.from_user.id
     user_name = m.from_user.full_name
     notification = Notifications.objects.create(from_user_id=id_t, from_user_name=user_name)
+
+#хандлер корзины
+#хандлер оплаты
+#    user_state = Members.objects.filter(id_t=m.from_user.id).update(user_state='В разделе меню')
+#    user_state = Members.objects.filter(id_t=m.from_user.id).update(user_state='В разделе меню')
+
+    bot.s

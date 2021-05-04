@@ -1,0 +1,10 @@
+{% load admin_list %}
+{% load i18n %}
+<p class="paginator">Кол-во:
+{% if pagination_required %}
+    {% for i in page_range %}
+        <a href="?p={{ i }}{% for key, value in params %}{% if key != 'p' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ i }}</a>
+    {% endfor %}
+{% endif %}
+{{ cl.result_count }}
+</p>

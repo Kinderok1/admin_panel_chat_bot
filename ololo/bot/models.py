@@ -10,9 +10,12 @@ class Members(models.Model):
     image = models.ImageField(upload_to='avatars/', null=True, blank=True)
     id_t = models.CharField(max_length=60, verbose_name='Телеграм ID',default='12378')
     name = models.CharField(max_length=110, verbose_name='ИМЯ',default='Pavel')
+    user_state = models.CharField(max_length=300, null=True, blank=True, default='В начале',verbose_name='Состояние')
+
     def image_tag(self):
         return mark_safe('<img src="%s" width="90" height="90" />' % (
             self.image.url))  # Get Image url
+
     class Meta:
         verbose_name = "Подписчика"
         verbose_name_plural = "Подписчики"
@@ -21,7 +24,11 @@ class Type(models.Model):
     """
     Model representing a book genre (e.g. Science Fiction, Non Fiction).
     """
-    name = models.CharField(max_length=200, help_text="Enter a book genre (e.g. Science Fiction, French Poetry etc.)")
+    name = models.CharField(max_length=200, help_text="Добавьте новую категорию(например Японская кухня, Закуски и т.п)")
+
+    class Meta:
+        verbose_name = "Категория"
+        verbose_name_plural = "Категории"
 
     def __str__(self):
         """
@@ -77,6 +84,8 @@ class Sendler(models.Model):
         flag['caption'] = self.header
         flag['status'] = STATUS_SENDLER[1]
         flag['pk'] = self.pk
+        flag['descrip'] = self.text
+        flag['image'] = self.image.path
         get_flag(flag)
 
     def __str__(self):
@@ -118,6 +127,5 @@ class Messages(models.Model):
             flag['msg'] = self.to_user_msg
             flag['owner'] = self.owner
             get_flag_msg(flag)
-
 
 

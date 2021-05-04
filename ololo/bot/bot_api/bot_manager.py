@@ -2,10 +2,10 @@ import asyncio
 import shelve
 from .misc.storage_utils import StorageHandler,FromAdminMessageHandler
 from loguru import logger
-from .bot import bot,dp
+from .bot import bot, dp
 data = dict()
-FILENAME = r'C:\Users\павел\PycharmProjects\huita\ololo\bot\bot_api\misc\states2.db'
-FILENAME2 = r'C:\Users\павел\PycharmProjects\huita\ololo\bot\bot_api\misc\states3.db'
+FILENAME = r'C:\Users\павел\PycharmProjects\huita\ololo\bot\bot_api\misc\states2.db' #hardcode
+FILENAME2 = r'C:\Users\павел\PycharmProjects\huita\ololo\bot\bot_api\misc\states3.db' #hardcode
 
 
 async def cancel_task(task_id: int):
@@ -42,10 +42,12 @@ async def bot_manager():
                 data['caption'] = states['caption']
                 data['status'] = states['status']
                 data['pk'] = states['pk']
+                data['descrip'] = states['descrip']
+                data['image'] = states['image']
                 states.clear()
 
             await dp.storage.set_data(user=data['pk'],
-                                      data={'date': data['date'], 'caption': data['caption'],'task_id': None,'active':False})
+                                      data={'date': data['date'], 'caption': data['caption'],'descrip':data['descrip'], 'image' :data['image'],'task_id': None,'active': False})
 
             task = loop.create_task(bla_bla())
 
