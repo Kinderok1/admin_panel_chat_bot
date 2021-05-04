@@ -7,7 +7,6 @@ class ItemForm(forms.ModelForm):
         model = Items
         fields = ('caption', 'image', 'description', 'type')
         widgets = {'caption': forms.TextInput,
-                   'image': forms.TextInput,
                    'description': forms.Textarea,
                    }
 class MembersListForm(forms.ModelForm):

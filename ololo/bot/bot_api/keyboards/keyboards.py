@@ -30,6 +30,7 @@ class DefaultConstructor:
     available_properities = ['text', 'request_contact', 'request_location', 'request_poll']
     properties_amount = 2
 
+    #Need refactoring!
     @classmethod
     def create_kb(cls):
         inline_kb_full = InlineKeyboardMarkup(row_width=2)
@@ -38,6 +39,8 @@ class DefaultConstructor:
             name = '%s %s' % (emoji.emojize(cls.aliases[t['name']],use_aliases=True),t['name'])
             if t['name'] == 'Десерты':
                 inline_kb_full.insert(InlineKeyboardButton(name, callback_data='Десерты'))
+            elif t['name'] == 'Роллы':
+                inline_kb_full.insert(InlineKeyboardButton(name, callback_data='Роллы'))
             else:
                 inline_kb_full.insert(InlineKeyboardButton(name,callback_data='_'))
 

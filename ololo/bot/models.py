@@ -38,9 +38,10 @@ class Type(models.Model):
 
 class Items(models.Model):
     caption = models.CharField(max_length=60, verbose_name='Название товара')
-    image = models.CharField(max_length=10, verbose_name='Изображение')
     description = models.CharField(max_length=150, verbose_name='Описание товара')
     type = models.ForeignKey(Type, on_delete=models.CASCADE, null=True, verbose_name="Тип")#удалишь тип,удалишь и эти записи
+    image = models.ImageField(upload_to='items_image/', null=True, blank=True, verbose_name='Изображение')
+
 
     def baby_boomer_status(self):
         return "what is this"
