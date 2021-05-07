@@ -36,7 +36,7 @@ def htmlification_msg(msg:str):
     for i in range(len(find_header)):
         before_editing = before_editing.replace('(%s)p' % find_header[i], '<p>%s</p>' % find_header[i])
 
-    find_header = re.findall(r'\((.*?)\)l',before_editing)#
+    find_header = re.findall(r'\((.*?)\)l',before_editing)
     for i in range(len(find_header)):
         if i == 0:
             before_editing = before_editing.replace('(%s)l' % find_header[i], '<p><ul><li>%s</li>' % find_header[i])

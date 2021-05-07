@@ -137,13 +137,12 @@ class NotificationsAdmin(admin.ModelAdmin):
     # def has_add_permission(self, request, obj=None):
     #     return False
 
-class MessagesAdmin(admin.ModelAdmin):
-    pass
 
 
 
 
-admin.site.register(Messages, MessagesAdmin)
+
+
 admin.site.register(Items, ItemsAdmin)
 admin.site.register(MembersList, MembersListAdmin)
 admin.site.register(Members, MembersAdmin)
