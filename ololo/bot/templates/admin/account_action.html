@@ -13,7 +13,7 @@
 {% for e in entries %}
     {% if e.from_user_msg %}
       <div class="container">
-        <img src="https://www.vippng.com/png/detail/416-4161690_empty-profile-picture-blank-avatar-image-circle.png" alt="Avatar">
+        <img src={{image_tag}} alt="Avatar">
         <p>{{e.from_user_msg}}</p>
         <span class="time-right">{{e.created_at}}</span>
       </div>

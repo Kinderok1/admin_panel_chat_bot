@@ -11,7 +11,7 @@ from ..keyboards.keyboards import DefaultConstructor
 django.setup()
 
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from ...models import Items, Notifications, Members
+from ...models import Items, Notifications, Members, Messages
 from ..bot import bot, dp
 
 
@@ -90,8 +90,9 @@ async def start_command(m: Message):
 
     member_name = m.from_user.full_name
     member_id = m.from_user.id
+    link_tg = m.from_user.url
 
-    new_member = Members(name=member_name, id_t=member_id)
+    new_member = Members(name=member_name, id_t=member_id, link_id=link_tg,)
     new_member.save()
 
     user_photo = await bot.get_user_profile_photos(m.from_user.id, offset=0)
@@ -176,6 +177,8 @@ async def notice(m: types.Message):
     id_t = m.from_user.id
     user_name = m.from_user.full_name
     notification = Notifications.objects.create(from_user_id=id_t, from_user_name=user_name)
+    member = Members.objects.get(id_t=id_t)
+    Messages.objects.create(owner=member, from_user_msg=m.text)
 
 # хандлер корзины
 # хандлер оплаты

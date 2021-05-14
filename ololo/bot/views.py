@@ -10,7 +10,7 @@ from .forms import MessageForm
 from .models import Notifications, Messages, Members
 
 
-def post(self,request):
+def post(self, request):
     user_form = MessageForm()
     return render(request,'admin/account_action.html')
 
@@ -22,6 +22,7 @@ def notifications(request):
     owner_id = request.GET.get('extra_id', 0)
 
     if goto != '':
+        #обновляем информацию.Помечаем нотификацию прочитанной
         context={}
         notification = Notifications.objects.get(pk=notification_id)
         notification.is_read = True
@@ -42,4 +43,4 @@ def notifications(request):
         )
         return HttpResponseRedirect(url)
 
-    return render(request, 'admin/bot/Notifications/change_list.html')
+    return render(request, 'admin/bot/Notifications/change_form.html')

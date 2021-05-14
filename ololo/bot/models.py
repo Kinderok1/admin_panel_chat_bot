@@ -7,11 +7,18 @@ STATUS_SENDLER = [ 'Ждет отправки к ', 'Было отправлен
 
 
 class Members(models.Model):
+
+    def __str__(self):
+        """
+        String for representing the Model object (in Admin site etc.)
+        """
+        return self.name
+
     image = models.ImageField(upload_to='avatars/', null=True, blank=True)
     id_t = models.CharField(max_length=60, verbose_name='Телеграм ID',default='12378')
     name = models.CharField(max_length=110, verbose_name='ИМЯ',default='Pavel')
     user_state = models.CharField(max_length=300, null=True, blank=True, default='В начале',verbose_name='Состояние')
-
+    link_id = models.CharField(max_length=300, null=True, blank=True,verbose_name='Ссылка телеграм')
     def image_tag(self):
         return mark_safe('<img src="%s" width="90" height="90" />' % (
             self.image.url))  # Get Image url
@@ -37,6 +44,12 @@ class Type(models.Model):
         return self.name
 
 class Items(models.Model):
+    def __str__(self):
+        """
+        String for representing the Model object (in Admin site etc.)
+        """
+        return self.caption
+
     caption = models.CharField(max_length=60, verbose_name='Название товара')
     description = models.CharField(max_length=150, verbose_name='Описание товара')
     type = models.ForeignKey(Type, on_delete=models.CASCADE, null=True, verbose_name="Тип")#удалишь тип,удалишь и эти записи
