@@ -129,7 +129,7 @@
                             <div class="notification">
                                 <p>
                                     <a href="{% url 'notifications' %}?goto=view_application&notification={{ notification.id }}&extra_id={{ notification.from_user_id }}">
-                                    <strong>{{ notification.from_user_name }}</strong> sent you a message<br>
+                                    <strong>{{ notification.from_user_name }}</strong> прислал сообщение<br>
                                     <small>{{ notification.created_at|timesince }} ago</small>
                                     </a>
                                 </p>

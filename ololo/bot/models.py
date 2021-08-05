@@ -31,7 +31,7 @@ class Type(models.Model):
     """
     Model representing a book genre (e.g. Science Fiction, Non Fiction).
     """
-    name = models.CharField(max_length=200, help_text="Добавьте новую категорию(например Японская кухня, Закуски и т.п)")
+    name = models.CharField(max_length=200)
 
     class Meta:
         verbose_name = "Категория"
@@ -54,7 +54,8 @@ class Items(models.Model):
     description = models.CharField(max_length=150, verbose_name='Описание товара')
     type = models.ForeignKey(Type, on_delete=models.CASCADE, null=True, verbose_name="Тип")#удалишь тип,удалишь и эти записи
     image = models.ImageField(upload_to='items_image/', null=True, blank=True, verbose_name='Изображение')
-
+    cost = models.IntegerField(null=True,blank=True,verbose_name='Цена')
+    link = models.CharField(max_length=80,null=True,blank=True, verbose_name='Ссылка для скачивания после покупки')
 
     def baby_boomer_status(self):
         return "what is this"
@@ -100,6 +101,7 @@ class Sendler(models.Model):
         flag['pk'] = self.pk
         flag['descrip'] = self.text
         flag['image'] = self.image.path
+        flag['ml'] = self.members_list.id_s_list
         get_flag(flag)
 
     def __str__(self):

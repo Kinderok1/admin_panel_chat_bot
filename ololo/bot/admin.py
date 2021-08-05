@@ -18,6 +18,10 @@ from django.utils.safestring import mark_safe
 
 
 class MembersAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request, obj=None):
+        '''hide add model button'''
+        return False
+
     list_display = ["image_tag", "name", 'user_state', 'members_actions']
     actions = ['make_list']
     form = MembersForm
@@ -136,7 +140,7 @@ class AdminImageWidget(AdminFileWidget):
         return mark_safe(u''.join(output))
 class ItemsAdmin(admin.ModelAdmin):
     list_filter = ('type',)
-    list_display = ('caption', 'image', 'description', 'type')
+    list_display = ('caption', 'image', 'description', 'type','cost','link')
     form = ItemForm
 
 
@@ -168,7 +172,8 @@ class NotificationsAdmin(admin.ModelAdmin):
 
 class MSGAdmin(admin.ModelAdmin):
     '''this is temporary view message obj then i can del all msge for debud'''
-
+    # def has_module_permission(self, request):
+    #     return False
 
 
 admin.site.register(Messages,MSGAdmin)

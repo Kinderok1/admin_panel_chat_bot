@@ -1,7 +1,8 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
+from django.template import loader
 from django.urls import reverse
 from django.views import View
 from django.shortcuts import render, redirect
@@ -9,6 +10,13 @@ from django.template.response import TemplateResponse
 from .forms import MessageForm
 from .models import Notifications, Messages, Members
 
+def settings(request):
+    '''do smthng'''
+    template = loader.get_template('bot/settings.html')
+    context = {
+
+    }
+    return HttpResponse(template.render(context, request))
 
 def post(self, request):
     user_form = MessageForm()

@@ -12,6 +12,7 @@ ROOT_DIRECTORY = Path(__file__).parent
 config = parse_config(ROOT_DIRECTORY / "config.yaml")
 
 # Bot, storage and dispatcher instances
+PAYMENTS_TOKEN = config.get("test_payment_token")[0]
 bot = Bot(**config.get("bot"))
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)

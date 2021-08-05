@@ -1,6 +1,6 @@
 # Telegram Bot API Token
 bot:
-    token: 1735844036:AAFT3bUgJqzPTTMIHNqjB1TaGfHo26S-EKg
+    token: 1823284420:AAHb4hmfmDpExwJRRSX8SVT3plip59EMk2s
     parse_mode: html
 
 # Whether to skip previous updates or not
@@ -12,4 +12,4 @@ commands:
     start: Start conversation with me
 
 test_payment_token:
-    - 381764678:TEST:24071
+    - 1744374395:TEST:7a2b10a6050bd4d443ae 

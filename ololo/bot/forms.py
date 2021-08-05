@@ -7,6 +7,7 @@ from django.contrib.admin.widgets import AdminFileWidget
 from django.conf import settings
 
 class BootstrapInputWidget(AdminFileWidget):
+    '''custom widget for display image in change_form.html'''
     def render(self, name, value, attrs=None, renderer=None):
         output = []
         if value and getattr(value, "url", None):
@@ -21,7 +22,7 @@ class BootstrapInputWidget(AdminFileWidget):
 class ItemForm(forms.ModelForm):
     class Meta:
         model = Items
-        fields = ('caption', 'image', 'description', 'type')
+        fields = ('caption', 'image', 'description', 'type','cost','link')
         widgets = {'caption': forms.TextInput,
                    'description': forms.Textarea,
                    'image': BootstrapInputWidget()
